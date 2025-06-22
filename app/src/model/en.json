@@ -1,0 +1,12 @@
+{
+    "intents": {
+      "emotional": {
+        "description": "Messages that express feelings or vulnerability.",
+        "examples": ["I feel sad today.", "I just need someone to listen."]
+      },
+      "logical": {
+        "description": "Messages that ask for information or plan something.",
+        "examples": ["Can I reschedule?", "What are the clinic hours?"]
+      }
+    }
+  }
