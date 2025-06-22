@@ -1,6 +1,7 @@
 from services.classifier import Classifier
 from state import State
-from services.llm import llm
+from services.chat_service import ChatService
+
 # from flows.booking import build_booking_graph
 # from flows.feedback import build_feedback_graph
 from langgraph.graph import StateGraph, START, END
@@ -36,7 +37,10 @@ def router(state: State):
 
 
 def chatbot(state: State):
-    return {"messages": [llm.invoke(state["messages"])]}
+    response = ChatService().respond(state["messages"])
+    print(f"llm response: {response}")
+    return {"messages": [response]}
+    # return {"messages": [llm.invoke(state["messages"])]}
 
 
 # Define a simple LLM function
