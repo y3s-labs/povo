@@ -3,3 +3,5 @@ langchain-core
 langchain-openai
 pydantic
 typing_extensions
+fastapi
+uvicorn
