@@ -1,4 +1,5 @@
 from .services.classifier import Classifier
+from .router import router
 from .state import State
 from .services.chat_service import ChatService
 from .types import Session, User
@@ -17,15 +18,6 @@ class App:
             intent = Classifier().classify(last_message.content)
             print(f"intent: {intent}")
             return {"intent": intent.intent}
-
-        def router(state: State):
-            intent = state.get("intent", "fallback")
-            if intent == "logical":
-                return {"next": "logical"}
-            elif intent == "emotional":
-                return {"next": "therapist"}
-            else:
-                return {"next": END}
 
         def chatbot(state: State):
             response = ChatService().respond(state["messages"])
