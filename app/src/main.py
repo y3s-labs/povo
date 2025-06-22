@@ -1,13 +1,9 @@
-from classifier import Classifier
+from services.classifier import Classifier
 from state import State
+from services.llm import llm
 # from flows.booking import build_booking_graph
 # from flows.feedback import build_feedback_graph
 from langgraph.graph import StateGraph, START, END
-import os
-
-from langchain.chat_models import init_chat_model
-
-from dotenv import load_dotenv
 
 from langgraph.graph.message import add_messages
 
@@ -16,16 +12,6 @@ from pydantic import BaseModel, Field
 # Build individual subgraphs
 # booking_graph = build_booking_graph()
 # feedback_graph = build_feedback_graph()
-
-load_dotenv()
-
-if not os.environ.get("OPENAI_API_KEY"):
-    print("Please set the OPENAI_API_KEY environment variable.")
-    os._exit(1)
-
-llm = init_chat_model(
-    "gpt-3.5-turbo",
-)
 
 # Compose into main graph
 app_graph = StateGraph(State)

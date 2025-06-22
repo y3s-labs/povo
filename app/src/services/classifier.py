@@ -23,7 +23,7 @@ class Classifier:
         )
 
     def _load_model(self) -> dict:
-        base_path = Path(__file__).resolve().parent
+        base_path = Path(__file__).resolve().parent.parent
         path = base_path / "model" / "en.json"
         with open(path, "r") as f:
             return json.load(f)["intents"]

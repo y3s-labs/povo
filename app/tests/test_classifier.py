@@ -1,4 +1,4 @@
-from app.src.classifier import Classifier
+from app.src.services.classifier import Classifier
 
 if __name__ == "__main__":
     classifier = Classifier()
