@@ -1,12 +1,58 @@
 {
-    "intents": {
-      "emotional": {
-        "description": "Messages that express feelings or vulnerability.",
-        "examples": ["I feel sad today.", "I just need someone to listen."]
+  "intents": {
+    "love": {
+      "description": "The user expresses love or enjoyment of pizza.",
+      "entities": {
+        "topping": {
+          "type": "TOPPING_TYPE"
+        }
       },
-      "logical": {
-        "description": "Messages that ask for information or plan something.",
-        "examples": ["Can I reschedule?", "What are the clinic hours?"]
-      }
+      "phrases": [
+        "I love pizza.",
+        "Mushroom pizza is my favorite.",
+        "I can't get enough of pepperoni!"
+      ]
+    },
+    "hate": {
+      "description": "The user expresses dislike or hatred of pizza.",
+      "phrases": [
+        "I hate pizza.",
+        "Pizza is too greasy for me.",
+        "It just tastes weird."
+      ]
+    }
+  },
+  "entityTypes": {
+    "TOPPING_TYPE": {
+      "values": [
+        "pepperoni",
+        "mushrooms",
+        "onions",
+        "sausage",
+        "green peppers",
+        "extra cheese",
+        "black olives",
+        "spinach",
+        "broccoli",
+        "tomatoes",
+        "basil",
+        "arugula",
+        "artichokes",
+        "zucchini",
+        "mozzarella",
+        "cheddar",
+        "goat cheese",
+        "ricotta",
+        "gorgonzola",
+        "feta",
+        "jalapeños",
+        "pineapple",
+        "anchovies",
+        "buffalo chicken",
+        "bbq sauce",
+        "hot honey",
+        "pesto"
+      ]
     }
   }
+}
