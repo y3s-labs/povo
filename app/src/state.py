@@ -11,5 +11,8 @@ class State(TypedDict):
     messages: Annotated[list, add_messages]
     session: Session
     user: User
+    session_data: dict | None
+    user_data: dict | None
     intent: str | None
+    entities: dict | None
     next: str | None

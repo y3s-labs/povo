@@ -13,11 +13,11 @@ class ChatService:
     def __init__(self, model_name="gpt-4o", temperature=0.7, system_prompt=None):
         self.model_name = model_name
         self.temperature = temperature
-        self.default_prompt = system_prompt or "You are a helpful assistant."
+        self.prompt = system_prompt or "You are a helpful assistant."
 
-    def respond(self, messages, system_prompt=None, temperature=None):
+    def respond(self, messages):
         # Choose which system prompt to apply
-        prompt_to_use = system_prompt or self.default_prompt
+        prompt_to_use = self.prompt
 
         # Convert messages to the format expected by ChatOpenAI
         formatted_messages = []
@@ -48,7 +48,7 @@ class ChatService:
 
         llm = ChatOpenAI(
             model=self.model_name,
-            temperature=temperature or self.temperature
+            temperature=self.temperature
         )
 
         return llm.invoke(formatted_messages)

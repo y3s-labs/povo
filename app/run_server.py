@@ -7,7 +7,7 @@ from langgraph.graph.message import add_messages
 # from state import State
 # from services.chat_service import ChatService
 # from services.classifier import Classifier
-from src.app import App
+from src.main import App
 import uvicorn
 from typing import List, Optional
 from pydantic import BaseModel
@@ -40,7 +40,6 @@ class ChatRequestBody(BaseModel):
     message: Message
     session: Session
     user: User
-    flow: Optional[str] = None
 
 
 class ChatRequest(BaseModel):
@@ -52,7 +51,6 @@ class ChatResponse(BaseModel):
     intent: str
     session: Optional[Session] = None
     user: Optional[User] = None
-    flow: Optional[str] = None
 
 
 @app.get("/")
@@ -84,7 +82,6 @@ async def chat(request: ChatRequest):
             "id": "user-123",
             "data": {}
         },
-        "flow": "optional-flow-name"
       }
     }
     """
@@ -93,24 +90,21 @@ async def chat(request: ChatRequest):
         message_text = request.body.message.text
         user = request.body.user
         session = request.body.session
-        flow = request.body.flow
 
         print(f"Received message: {message_text}")
         print(f"User ID: {user.id}")
         print(f"Session ID: {session.id}")
-        print(f"Flow: {flow}")
 
         # Invoke the graph
-        state = App().run(message_text, session, user, flow)
+        state = App().run(message_text, session, user)
 
-        print(f"state: {state}")
+        print(f"<<final state>>: {state}")
 
         return ChatResponse(
             response=state["messages"][-1].content,
             intent=state["intent"],
             session=state["session"],
             user=state["user"],
-            flow=state["next"]
         )
 
     except Exception as e:
