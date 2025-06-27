@@ -25,9 +25,28 @@ def _execute_agent(state: PizzaState, sys_msg: str):
 
 
 def pizza_agent(state: PizzaState):
-    sys_msg = """If the user expresses love for pizza, ask them about their favorite topppings. 
+    pizza_toppings = state["entities"].get("topping", None)
+    pizza_size = state["entities"].get("size", None)
+    pizza_sauce = state["entities"].get("sauce", None)
+    pizza_base = state["entities"].get("base", None)
+
+    print(f"pizza_toppings: {pizza_toppings}")
+    print(f"pizza_size: {pizza_size}")
+    print(f"pizza_sauce: {pizza_sauce}")
+    print(f"pizza_base: {pizza_base}")
+
+    sys_msg = f"""If the user expresses love for pizza, ask them questions about the kind of pizza they want.
     
-    If they express hate pizza, let them know that they probably have no friends and say goodbye."""
+    If they express hate pizza, let them know that you love pizza and say goodbye.
+    
+    Keep asking questions until the pizza state is complete.
+    
+    Current Pizza State:
+    Toppings: {pizza_toppings}
+    Size: {pizza_size}
+    Sauce: {pizza_sauce}
+    Base: {pizza_base}
+    """
 
     print(f"pizza_agent called with state: {state}")
 

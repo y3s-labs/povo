@@ -5,6 +5,15 @@
       "entities": {
         "topping": {
           "type": "TOPPING_TYPE"
+        },
+        "size":{
+          "type": "SIZE_TYPE"
+        },
+        "base": {
+          "type": "BASE_TYPE"
+        },
+        "sauce": {
+          "type": "SAUCE_TYPE"
         }
       },
       "phrases": [
@@ -23,6 +32,27 @@
     }
   },
   "entityTypes": {
+    "SIZE_TYPE": {
+      "values": [
+        "small",
+        "medium",
+        "large"
+      ]
+    },
+    "BASE_TYPE": {
+      "values": [
+        "thin",
+        "thick",
+        "stuffed"
+      ]
+    },
+    "SAUCE_TYPE": {
+      "values": [
+        "marinara",
+        "alfredo",
+        "bbq"
+      ]
+    },
     "TOPPING_TYPE": {
       "values": [
         "pepperoni",
