@@ -1,0 +1,24 @@
+{
+  "name": "chatbot-client",
+  "version": "1.0.0",
+  "description": "Simple Vue 3 chatbot client",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "start": "vite",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "axios": "^1.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "vite": "^4.4.9",
+    "eslint": "^8.45.0",
+    "eslint-plugin-vue": "^9.15.1"
+  }
+} 
