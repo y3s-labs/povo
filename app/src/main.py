@@ -12,6 +12,7 @@ from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 
 from .flows.pizza_graph import pizza_agent
+from .flows.general_graph import general_agent
 
 
 class App:
@@ -24,29 +25,28 @@ class App:
             print(f"intent: {intent}")
             return {"intent": intent.intent, "entities": intent.entities}
 
-        def chatbot(state: State):
-            """Generate a response using the chat service."""
-            response = ChatService().respond(state["messages"])
-            print(f"llm response: {response}")
-            return {"messages": [response]}
+        # def chatbot(state: State):
+        #     """Generate a response using the chat service."""
+        #     response = ChatService().respond(state["messages"])
+        #     print(f"llm response: {response}")
+        #     return {"messages": [response]}
 
         app_graph = StateGraph(State)
 
         app_graph.add_node("classify_intent", classify_intent)
         app_graph.add_node("router", router)
-        app_graph.add_node("chatbot", chatbot)
+        app_graph.add_node("chatbot", general_agent)
         app_graph.add_node("pizza_agent", pizza_agent)
 
         app_graph.add_edge(start_key=START, end_key="classify_intent")
-        app_graph.add_edge(start_key="classify_intent", end_key="router")
+        # app_graph.add_edge(start_key="classify_intent", end_key="router")
 
         # Conditional edges based on intent classification
-        # app_graph.add_conditional_edges("router", {
-        #     "love": "pizza_agent",
-        #     "hate": "pizza_agent",
-        #     "general_chat": "chatbot"
-        # })
-        app_graph.add_edge(start_key="router", end_key="pizza_agent")
+        app_graph.add_conditional_edges("classify_intent", router, {
+            "pizza": "pizza_agent",
+            "general": "chatbot"
+        })
+        # app_graph.add_edge(start_key="router", end_key="pizza_agent")
 
         app_graph.add_edge(start_key="pizza_agent", end_key=END)
         # app_graph.add_edge(start_key="chatbot", end_key=END)

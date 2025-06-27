@@ -5,8 +5,8 @@ from langgraph.graph import StateGraph, START, END
 def router(state: State):
     intent = state.get("intent", "fallback")
     if intent == "love":
-        return {"next": "logical"}
+        return "pizza"
     elif intent == "hate":
-        return {"next": "therapist"}
+        return "pizza"
     else:
-        return {"next": END}
+        return "general"
