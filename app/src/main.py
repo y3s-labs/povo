@@ -35,7 +35,7 @@ class App:
 
         app_graph.add_node("classify_intent", classify_intent)
         app_graph.add_node("router", router)
-        app_graph.add_node("chatbot", general_agent)
+        app_graph.add_node("general_agent", general_agent)
         app_graph.add_node("pizza_agent", pizza_agent)
 
         app_graph.add_edge(start_key=START, end_key="classify_intent")
@@ -44,7 +44,7 @@ class App:
         # Conditional edges based on intent classification
         app_graph.add_conditional_edges("classify_intent", router, {
             "pizza": "pizza_agent",
-            "general": "chatbot"
+            "general": "general_agent"
         })
         # app_graph.add_edge(start_key="router", end_key="pizza_agent")
 
