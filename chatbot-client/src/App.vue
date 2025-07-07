@@ -76,6 +76,8 @@ export default {
             }
           }
         })
+
+        // keep track of the current flow 
         
         // Add bot response to chat
         this.addMessage(response.data.response, 'bot')

@@ -14,5 +14,5 @@ class State(TypedDict):
     session_data: dict | None
     user_data: dict | None
     intent: str | None
+    currentFlow: str | None
     entities: dict | None
-    next: str | None

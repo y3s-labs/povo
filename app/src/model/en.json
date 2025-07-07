@@ -1,7 +1,7 @@
 {
   "intents": {
     "love": {
-      "description": "The user expresses love or enjoyment of pizza.",
+      "description": "The user expresses love or enjoyment of pizza with a topping, size, base, and sausce",
       "entities": {
         "topping": {
           "type": "TOPPING_TYPE"
@@ -18,8 +18,15 @@
       },
       "phrases": [
         "I love pizza.",
-        "Mushroom pizza is my favorite.",
-        "I can't get enough of pepperoni!"
+        "I want {size} pizza with {topping}.",
+        "I want {size} pizza with {topping} and {sauce} sauce.",
+        "{topping} pizza is my favorite.",
+        "I can't get enough of {topping}!",
+        "{topping}",
+        "{size}",
+        "{base}",
+        "{sauce}",
+        "{size} {topping} pizza"
       ]
     },
     "hate": {

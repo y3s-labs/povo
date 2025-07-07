@@ -13,4 +13,5 @@ class User(BaseModel):
 class Session(BaseModel):
     id: str
     new: bool
+    flow: str = "general"
     data: dict

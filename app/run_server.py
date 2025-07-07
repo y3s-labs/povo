@@ -75,6 +75,7 @@ async def chat(request: ChatRequest):
         },
         "session": {
           "id": "session-abc",
+          "flow": "general",
           "new": true
           "data": {}
         },

@@ -53,10 +53,9 @@ class App:
 
         self.graph = app_graph.compile()
 
-    def run(self, user_input: str, session: Session, user: User, next: str | None = None):
+    def run(self, user_input: str, session: Session, user: User):
         initial_state = {
             "messages": [{"role": "user", "content": user_input}],
-            "next": next,
             "session": session,
             "session_data": copy.deepcopy(session.data),
             "user": user,

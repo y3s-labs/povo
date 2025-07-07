@@ -19,6 +19,9 @@ def _execute_agent(state: PizzaState, sys_msg: str):
 
     response = ChatService(system_prompt=sys_msg).respond(state["messages"])
 
+    # Store current flow in the state
+    state["currentFlow"] = "pizza"
+
     return {"messages": [response]}
 
 # defining activity node

@@ -8,6 +8,9 @@ if __name__ == "__main__":
         "I love pizza with mushrooms",
         "I love pizza with mushrooms and pepperoni",
         "I hate pizza",
+        "medium pizza with mushrooms and pepperoni",
+        "medium",
+        "medium pizza"
     ]
 
     for msg in test_messages:
