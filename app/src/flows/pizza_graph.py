@@ -28,27 +28,40 @@ def _execute_agent(state: PizzaState, sys_msg: str):
 
 
 def pizza_agent(state: PizzaState):
+    """Handle pizza-related intents and pizza ordering process."""
     pizza_toppings = state["entities"].get("topping", None)
     pizza_size = state["entities"].get("size", None)
     pizza_sauce = state["entities"].get("sauce", None)
     pizza_base = state["entities"].get("base", None)
+    intent = state.get("intent", None)
 
+    print(f"pizza_agent called with intent: {intent}")
     print(f"pizza_toppings: {pizza_toppings}")
     print(f"pizza_size: {pizza_size}")
     print(f"pizza_sauce: {pizza_sauce}")
     print(f"pizza_base: {pizza_base}")
 
-    sys_msg = f"""If the user expresses love for pizza, ask them questions about the kind of pizza they want.
+    # Handle different pizza-related intents
+    if intent == "love":
+        context = "The user expressed love for pizza. Ask them about their pizza preferences."
+    elif intent == "hate":
+        context = "The user expressed hate for pizza. Acknowledge their preference politely and suggest alternatives or say goodbye."
+    elif intent in ["pizza_order", "pizza_craving", "food_order"]:
+        context = "The user wants to order pizza or is craving pizza. Help them build their ideal pizza order."
+    else:
+        context = "This is a pizza-related conversation. Help the user with their pizza needs."
+
+    sys_msg = f"""{context}
     
-    If they express hate pizza, let them know that you love pizza and say goodbye.
-    
-    Keep asking questions until the pizza state is complete.
+    Keep asking questions until you have enough information to complete the pizza order.
     
     Current Pizza State:
     Toppings: {pizza_toppings}
     Size: {pizza_size}
     Sauce: {pizza_sauce}
     Base: {pizza_base}
+    
+    If all required information is collected, summarize the order and ask for confirmation.
     """
 
     print(f"pizza_agent called with state: {state}")

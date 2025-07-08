@@ -4,6 +4,7 @@ from .router import router
 from .state import State
 from .services.chat_service import ChatService
 from .types import Session, User
+from .intent_config import configure_intent_routing, print_routing_summary
 
 # from flows.booking import build_booking_graph
 # from flows.feedback import build_feedback_graph
@@ -62,3 +63,7 @@ class App:
             "user_data": copy.deepcopy(user.data),
         }
         return self.graph.invoke(initial_state)
+    
+    def debug_routing(self):
+        """Print routing information for debugging purposes."""
+        print_routing_summary()
