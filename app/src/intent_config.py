@@ -10,11 +10,11 @@ from .router import intent_router, add_pizza_intents, add_general_intents, add_c
 
 def configure_intent_routing():
     """Configure all intent routing rules."""
-    
+
     # Pizza-related intents
     add_pizza_intents(
         "love",
-        "hate", 
+        "hate",
         "pizza_order",
         "pizza_craving",
         "food_order",
@@ -24,7 +24,7 @@ def configure_intent_routing():
         "pizza_menu",
         "pizza_special"
     )
-    
+
     # General conversation intents
     add_general_intents(
         "general_chat",
@@ -37,7 +37,7 @@ def configure_intent_routing():
         "small_talk",
         "mood_check"
     )
-    
+
     # Booking/reservation intents (if you implement the booking flow)
     add_custom_flow_intents(
         "booking",
@@ -48,7 +48,7 @@ def configure_intent_routing():
         "book_table",
         "dining_reservation"
     )
-    
+
     # You can easily add more flows here:
     # add_custom_flow_intents("weather", "weather_forecast", "temperature", "rain")
     # add_custom_flow_intents("news", "latest_news", "headlines", "current_events")

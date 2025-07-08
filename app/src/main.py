@@ -63,7 +63,7 @@ class App:
             "user_data": copy.deepcopy(user.data),
         }
         return self.graph.invoke(initial_state)
-    
+
     def debug_routing(self):
         """Print routing information for debugging purposes."""
         print_routing_summary()
