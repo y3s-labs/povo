@@ -3,9 +3,9 @@ set -e
 
 # Configuration
 DOCKER_HUB_USERNAME="your-dockerhub-username"  # Replace with your Docker Hub username
-IMAGE_NAME="povo-chatbot"
+IMAGE_NAME="povo-server"
 PROJECT_ID="your-gcp-project-id"  # Replace with your GCP project ID
-SERVICE_NAME="povo-chatbot"
+SERVICE_NAME="povo-server"
 REGION="us-central1"  # Change to your preferred region
 
 # Colors for output

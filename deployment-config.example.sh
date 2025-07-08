@@ -3,12 +3,12 @@
 
 # Docker Hub Configuration
 export DOCKER_HUB_USERNAME="your-dockerhub-username"
-export IMAGE_NAME="povo-chatbot"
+export IMAGE_NAME="povo-server"
 export TAG="latest"
 
 # Google Cloud Configuration
 export PROJECT_ID="your-gcp-project-id"
-export SERVICE_NAME="povo-chatbot"
+export SERVICE_NAME="povo-server"
 export REGION="us-central1"
 
 # Cloud Run Configuration

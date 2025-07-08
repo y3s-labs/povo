@@ -98,18 +98,66 @@ This will:
 - Deploy your container to Cloud Run
 - Provide your service URL
 
+## Google Artifact Registry Deployment (Recommended)
+
+Google Artifact Registry is the recommended approach for deploying to Cloud Run as it's more integrated with Google Cloud services and provides better security and performance.
+
+### Quick Start with Artifact Registry
+
+1. **Configure your project ID** in the scripts:
+   ```bash
+   # Edit scripts/build-and-push-artifact.sh
+   PROJECT_ID="your-gcp-project-id"
+   REGION="us-central1"
+   ```
+
+2. **Run the complete deployment**:
+   ```bash
+   ./scripts/complete-artifact-deploy.sh
+   ```
+
+This single command will:
+- Create an Artifact Registry repository
+- Build your Docker image
+- Push it to Artifact Registry
+- Deploy to Cloud Run
+- Automatically include your `.env` file variables
+
+### Individual Steps with Artifact Registry
+
+If you prefer to run steps individually:
+
+```bash
+# Step 1: Build and push to Artifact Registry
+./scripts/build-and-push-artifact.sh
+
+# Step 2: Deploy to Cloud Run
+./scripts/deploy-cloudrun-from-artifact.sh
+```
+
+### Environment Variables with Artifact Registry
+
+The Artifact Registry deployment scripts automatically:
+- Read your `.env` file
+- Include all environment variables in the Cloud Run deployment
+- Handle the `OPENAI_API_KEY` and other secrets securely
+
+**No manual environment variable configuration needed!**
+
+---
+
 ## Manual Step-by-Step Process
 
 ### 1. Build Docker Image
 ```bash
 # Build the image
-docker build -t your-dockerhub-username/povo-chatbot:latest .
+docker build -t your-dockerhub-username/povo-server:latest .
 
 # Test locally without API key (demo mode)
-docker run -p 8080:8080 your-dockerhub-username/povo-chatbot:latest
+docker run -p 8080:8080 your-dockerhub-username/povo-server:latest
 
 # Test locally with API key (full functionality)
-docker run -p 8080:8080 -e OPENAI_API_KEY=your_key_here your-dockerhub-username/povo-chatbot:latest
+docker run -p 8080:8080 -e OPENAI_API_KEY=your_key_here your-dockerhub-username/povo-server:latest
 ```
 
 ### 2. Push to Docker Hub
@@ -118,7 +166,7 @@ docker run -p 8080:8080 -e OPENAI_API_KEY=your_key_here your-dockerhub-username/
 docker login
 
 # Push the image
-docker push your-dockerhub-username/povo-chatbot:latest
+docker push your-dockerhub-username/povo-server:latest
 ```
 
 ### 3. Deploy to Cloud Run
@@ -134,8 +182,8 @@ gcloud services enable run.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
 
 # Deploy to Cloud Run (with API key)
-gcloud run deploy povo-chatbot \
-  --image=your-dockerhub-username/povo-chatbot:latest \
+gcloud run deploy povo-server \
+  --image=your-dockerhub-username/povo-server:latest \
   --platform=managed \
   --region=us-central1 \
   --allow-unauthenticated \
@@ -148,8 +196,8 @@ gcloud run deploy povo-chatbot \
   --set-env-vars="ENV=production,OPENAI_API_KEY=your_openai_api_key_here"
 
 # Or deploy without API key (demo mode)
-gcloud run deploy povo-chatbot \
-  --image=your-dockerhub-username/povo-chatbot:latest \
+gcloud run deploy povo-server \
+  --image=your-dockerhub-username/povo-server:latest \
   --platform=managed \
   --region=us-central1 \
   --allow-unauthenticated \
@@ -167,8 +215,8 @@ gcloud run deploy povo-chatbot \
 If your application requires environment variables, add them to the deployment:
 
 ```bash
-gcloud run deploy povo-chatbot \
-  --image=your-dockerhub-username/povo-chatbot:latest \
+gcloud run deploy povo-server \
+  --image=your-dockerhub-username/povo-server:latest \
   --set-env-vars="ENV=production,OPENAI_API_KEY=your-key,ANOTHER_VAR=value"
 ```
 
@@ -211,15 +259,15 @@ curl -X POST "https://your-service-url/chat" \
 1. **Docker build fails**: Make sure Docker is running and you're in the project root
 2. **Push fails**: Make sure you're logged into Docker Hub (`docker login`)
 3. **Cloud Run deployment fails**: Check your GCP project ID and ensure billing is enabled
-4. **Service not responding**: Check logs with `gcloud run logs read --service=povo-chatbot`
+4. **Service not responding**: Check logs with `gcloud run logs read --service=povo-server`
 
 ### Checking Logs
 ```bash
 # View Cloud Run logs
-gcloud run logs read --service=povo-chatbot --region=us-central1
+gcloud run logs read --service=povo-server --region=us-central1
 
 # Follow logs in real-time
-gcloud run logs tail --service=povo-chatbot --region=us-central1
+gcloud run logs tail --service=povo-server --region=us-central1
 ```
 
 ### Update Deployment

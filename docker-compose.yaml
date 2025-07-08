@@ -5,8 +5,7 @@ services:
     build: .
     ports:
       - "8080:8080"
-    environment:
-      - ENV=production
     env_file:
       - .env
-    command: python run_server.py
+    command: >
+      uvicorn app.run_server:app --host 0.0.0.0 --port ${PORT:-8080}
