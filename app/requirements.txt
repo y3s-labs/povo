@@ -1,7 +1,12 @@
 langgraph
+langchain
 langchain-core
 langchain-openai
+langchain-google-genai
 pydantic
 typing_extensions
 fastapi
 uvicorn
+mangum
+dotenv
+functions-framework
