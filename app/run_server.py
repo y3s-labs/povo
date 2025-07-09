@@ -112,3 +112,8 @@ async def chat(request: ChatRequest):
         print(f"Error processing chat: {str(e)}")
         raise HTTPException(
             status_code=500, detail=f"Error processing chat: {str(e)}") from e
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    print(f"Starting Povo on port {port}...")
+    uvicorn.run("run_server:app", host="0.0.0.0", port=port)

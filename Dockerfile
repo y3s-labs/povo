@@ -19,5 +19,5 @@ USER app
 EXPOSE 8080
 
 # Run the application
-CMD ["sh", "-c", "exec uvicorn run_server:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["python", "run_server.py"]
 
