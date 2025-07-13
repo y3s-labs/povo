@@ -26,7 +26,6 @@ class IntentRouter:
         """Route an intent to the appropriate flow."""
         if not intent:
             return self._default_flow
-
         return self._intent_registry.get(intent, self._default_flow)
 
     def get_registered_intents(self) -> List[str]:
@@ -41,9 +40,9 @@ intent_router = IntentRouter()
 intent_router.register_intents({
     "love": "pizza",
     "hate": "pizza",
-    "pizza_order": "pizza",
-    "pizza_craving": "pizza",
-    "food_order": "pizza",
+    # "pizza_order": "pizza",
+    # "pizza_craving": "pizza",
+    # "food_order": "pizza",
     "general_chat": "general",
     "emotional_support": "general",
     "wellbeing": "general"
