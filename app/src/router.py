@@ -85,6 +85,5 @@ def router(state: State) -> str:
     flow = intent_router.route(intent)
 
     print(f"Routing intent '{intent}' to flow '{flow}'")
-    print(f"Available intents: {intent_router.get_registered_intents()}")
 
     return flow

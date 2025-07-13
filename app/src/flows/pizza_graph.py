@@ -1,5 +1,4 @@
 from operator import add
-from typing import Annotated
 from langgraph.graph import StateGraph, END
 
 from ..services.chat_service import ChatService
@@ -20,26 +19,34 @@ def _execute_agent(state: PizzaState, sys_msg: str):
     return {
         "messages": [response],
         "currentFlow": "pizza",
-        "session": update_session_data(state, "pizza", state.get("pizza"))
+        "session": update_session_data(state, "pizza")
     }
 
 
 def pizza_agent(state: PizzaState):
     """Handle pizza-related intents and pizza ordering process."""
 
+    print(f"pizza_agent called pizza state: {state}")
+
+    # Ensure we work with a copy of the pizza state
+    session_data = dict(state["session"]).get("data", {})
+
+    current_pizza = {}
+    if session_data is not {}:
+        current_pizza = session_data.get("pizza", {})
+
     # Access and mutate original session data dict
-    pizza = {
+    new_pizza = {
         "base": state["entities"].get("BASE_TYPE"),
         "toppings": state["entities"].get("TOPPING_TYPE"),
         "size": state["entities"].get("SIZE_TYPE"),
         "sauce": state["entities"].get("SAUCE_TYPE"),
     }
 
-    intent = state.get("intent")
-    state["pizza"] = pizza  # Update the pizza state in the session
-    # state["session"]["data"] = pizza
+    pizza = _merge_pizza(current_pizza, new_pizza)
 
-    print(f"pizza_agent called with intent: {intent} and pizza state: {pizza}")
+    intent = state.get("intent")
+    state["pizza"] = pizza  # Update state with merged pizza data
 
     # Handle different pizza-related intents
     if intent == "love":
@@ -56,8 +63,35 @@ def pizza_agent(state: PizzaState):
     Size: {pizza.get("size")}
     Sauce: {pizza.get("sauce")}
     Base: {pizza.get("base")}
-    
-    If all required information is collected, summarize the order and ask for confirmation.
+
+    If order is complete, summarize the order and ask for confirmation.
     """
 
-    return _execute_agent(state, sys_msg)
+    if _validate_order(pizza) == "Complete":
+        return _execute_agent(state, sys_msg)
+    else:
+        return placeOrder(pizza)
+
+
+def _validate_order(pizza: dict) -> str:
+    """Validate the pizza order to ensure all fields have valid entries."""
+    required_fields = ["base", "toppings", "size", "sauce"]
+    missing_fields = [
+        field for field in required_fields if not pizza.get(field)]
+
+    if missing_fields:
+        return "Incomplete"
+
+    return "Complete"
+
+
+def _merge_pizza(current_pizza, new_pizza):
+    """Merge the current pizza with the new pizza data."""
+    print("Merging pizza data...", new_pizza, current_pizza)
+    # Merge: only update missing or None values
+    for key, value in dict(new_pizza).items():
+        if value is not None:
+            current_pizza[key] = value
+
+    print("Merged pizza data:", current_pizza)
+    return current_pizza

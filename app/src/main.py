@@ -45,15 +45,12 @@ class App:
 
         # Get all available flows and create dynamic conditional edges
         available_flows = get_available_flows()
-        print("******** Available Flows:", available_flows)
         flow_mapping = {}
 
         for flow in available_flows:
             flow_mapping[flow] = f"{flow}_agent"
             # Add edge from each agent to END
             app_graph.add_edge(start_key=f"{flow}_agent", end_key=END)
-
-        print("******Flow Mapping:", flow_mapping)
 
         # Add conditional edges based on intent classification with dynamic flow mapping
         app_graph.add_conditional_edges(
@@ -68,10 +65,10 @@ class App:
         initial_state = {
             "messages": [{"role": "user", "content": user_input}],
             "session": session,
-            "session_data": copy.deepcopy(session.data),
             "user": user,
-            "user_data": copy.deepcopy(user.data),
         }
+
+        print(f"Running app with initial state: {initial_state}")
         return self.graph.invoke(initial_state)
 
     def debug_routing(self):

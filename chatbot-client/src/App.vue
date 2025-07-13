@@ -3,6 +3,9 @@
     <div class="chat-container">
       <div class="chat-header">
         <h1>Povo Chatbot</h1>
+        <div class="session-info" v-if="currentSession">
+          <small>Flow: {{ getCurrentFlow() }} | Session: {{ sessionId.substring(0, 8) }}...</small>
+        </div>
       </div>
       
       <div class="chat-messages" ref="messagesContainer">
@@ -44,7 +47,8 @@ export default {
       userInput: '',
       isLoading: false,
       sessionId: this.generateSessionId(),
-      userId: this.generateUserId()
+      userId: this.generateUserId(),
+      currentSession: null, // Store the current session object
     }
   },
   methods: {
@@ -58,16 +62,16 @@ export default {
       this.addMessage(userMessage, 'user')
       
       this.isLoading = true
-      
-      try {
-        const response = await axios.post('http://localhost:8080/chat', {
+
+      const body = {
           body: {
             message: {
               text: userMessage
             },
-            session: {
+            session: this.currentSession || {
               id: this.sessionId,
-              new: this.messages.length === 1, // true if this is the first message
+              flow: 'general',
+              new: true, // true if this is the first message
               data: {}
             },
             user: {
@@ -75,9 +79,18 @@ export default {
               data: {}
             }
           }
-        })
+      }
 
-        // keep track of the current flow 
+      console.log('Sending message:', JSON.stringify(body, null, 2))
+      
+      try {
+        const response = await axios.post('http://localhost:8080/chat', body)
+
+        // Save the updated session from the response
+        if (response.data.session) {
+          this.currentSession = response.data.session
+          console.log('Session updated:', JSON.stringify(this.currentSession.data, null, 2))
+        }
         
         // Add bot response to chat
         this.addMessage(response.data.response, 'bot')
@@ -120,6 +133,23 @@ export default {
     
     generateUserId() {
       return 'user-' + Math.random().toString(36).substr(2, 9)
+    },
+
+    // Session management methods
+    getSessionData() {
+      return this.currentSession ? this.currentSession.data : {}
+    },
+
+    getCurrentFlow() {
+      return this.currentFlow || 'general'
+    },
+
+    resetSession() {
+      this.currentSession = null
+      this.currentFlow = null
+      this.sessionId = this.generateSessionId()
+      this.messages = []
+      this.addMessage('I\'m Povo, your AI assistant. How can I help you today?', 'bot')
     }
   },
   
@@ -163,6 +193,12 @@ export default {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
+}
+
+.session-info {
+  margin-top: 8px;
+  opacity: 0.8;
+  font-size: 12px;
 }
 
 .chat-messages {
