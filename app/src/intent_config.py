@@ -15,27 +15,28 @@ def configure_intent_routing():
     add_pizza_intents(
         "love",
         "hate",
-        "pizza_order",
-        "pizza_craving",
-        "food_order",
-        "italian_food",
-        "cheese_craving",
-        "pizza_delivery",
-        "pizza_menu",
-        "pizza_special"
+
+        # "pizza_order",
+        # "pizza_craving",
+        # "food_order",
+        # "italian_food",
+        # "cheese_craving",
+        # "pizza_delivery",
+        # "pizza_menu",
+        # "pizza_special"
     )
 
     # General conversation intents
     add_general_intents(
         "general_chat",
-        "emotional_support",
-        "wellbeing",
-        "greeting",
-        "goodbye",
-        "help",
-        "thanks",
-        "small_talk",
-        "mood_check"
+        # "emotional_support",
+        # "wellbeing",
+        # "greeting",
+        # "goodbye",
+        # "help",
+        # "thanks",
+        # "small_talk",
+        # "mood_check"
     )
 
     # Booking/reservation intents (if you implement the booking flow)

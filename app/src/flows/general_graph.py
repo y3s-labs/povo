@@ -8,7 +8,7 @@ from ..state import State
 
 class GeneralState(State):
     """State for the general graph flow."""
-    pass
+    currentFlow = "general"
 
 
 def _execute_agent(state: GeneralState, sys_msg: str):
@@ -35,5 +35,7 @@ def general_agent(state: GeneralState):
     """
 
     print(f"general_agent called with state: {state}")
+
+    state["currentFlow"] = "general"
 
     return _execute_agent(state, sys_msg)

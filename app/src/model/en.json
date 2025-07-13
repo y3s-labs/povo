@@ -36,6 +36,53 @@
         "Pizza is too greasy for me.",
         "It just tastes weird."
       ]
+    },
+    "general_chat": {
+      "description": "General conversation, greetings, and casual talk.",
+      "phrases": [
+        "Hello",
+        "Hi there",
+        "How are you?",
+        "What's up?",
+        "Good morning",
+        "Good evening",
+        "How's your day?",
+        "Tell me about yourself",
+        "What can you do?"
+      ]
+    },
+    "reservation": {
+      "description": "User wants to make a restaurant reservation or booking.",
+      "entities": {
+        "date": {
+          "type": "DATE_TYPE"
+        },
+        "time": {
+          "type": "TIME_TYPE"
+        },
+        "party_size": {
+          "type": "NUMBER_TYPE"
+        }
+      },
+      "phrases": [
+        "I want to make a reservation",
+        "Book a table for {party_size}",
+        "Reserve a table for {date} at {time}",
+        "Can I book a table?",
+        "Table for {party_size} people",
+        "Make a reservation for tonight",
+        "Book a table for dinner"
+      ]
+    },
+    "table_booking": {
+      "description": "Specific requests for table booking.",
+      "phrases": [
+        "Book a table",
+        "Reserve a table",
+        "Table booking",
+        "Book dinner table",
+        "Reserve dining table"
+      ]
     }
   },
   "entityTypes": {
@@ -89,6 +136,53 @@
         "bbq sauce",
         "hot honey",
         "pesto"
+      ]
+    },
+    "DATE_TYPE": {
+      "values": [
+        "today",
+        "tomorrow",
+        "tonight",
+        "this evening",
+        "this weekend",
+        "next week",
+        "Monday",
+        "Tuesday", 
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ]
+    },
+    "TIME_TYPE": {
+      "values": [
+        "6pm",
+        "7pm", 
+        "8pm",
+        "6:00",
+        "7:00",
+        "8:00",
+        "dinner time",
+        "lunch time",
+        "evening",
+        "afternoon"
+      ]
+    },
+    "NUMBER_TYPE": {
+      "values": [
+        "1",
+        "2", 
+        "3",
+        "4",
+        "5",
+        "6",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six"
       ]
     }
   }

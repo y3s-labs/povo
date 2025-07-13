@@ -101,6 +101,11 @@ async def chat(request: ChatRequest):
 
         print(f"<<final state>>: {state}")
 
+        # update session with current flow
+        if "currentFlow" in state:
+            session.flow = state["currentFlow"]
+            print(f"Updated session flow to: {session.flow}")
+
         return ChatResponse(
             response=state["messages"][-1].content,
             intent=state["intent"],

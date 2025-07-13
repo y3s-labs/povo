@@ -8,10 +8,10 @@ from ..state import State
 
 class BookingState(State):
     """State for the booking graph flow."""
-    restaurant_name: str = None
     date: str = None
     time: str = None
     party_size: int = None
+    currentFlow = "booking"
 
 
 def _execute_agent(state: BookingState, sys_msg: str):
@@ -22,7 +22,7 @@ def _execute_agent(state: BookingState, sys_msg: str):
     # Store current flow in the state
     state["currentFlow"] = "booking"
 
-    return {"messages": [response]}
+    return {"messages": [response], "currentFlow": "booking"}
 
 
 def booking_agent(state: BookingState):

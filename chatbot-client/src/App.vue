@@ -60,7 +60,7 @@ export default {
       this.isLoading = true
       
       try {
-        const response = await axios.post('http://localhost:8000/chat', {
+        const response = await axios.post('http://localhost:8080/chat', {
           body: {
             message: {
               text: userMessage
