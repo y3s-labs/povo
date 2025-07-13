@@ -11,6 +11,78 @@ class PizzaState(State):
     pizza: dict = {}
 
 
+def _intent_handler(state: PizzaState):
+
+    print(f"Handling intent for pizza state: {state}")
+
+    intent = state.get("intent")
+    if intent == "confirm_order":
+        return _place_order(state)
+    elif intent == "love":
+        return _fill_order(state)
+    elif intent == "hate":
+        return _hate_pizza(state)
+    else:  # return to general flow
+        return _fill_order(state)
+
+
+def _place_order(state: PizzaState):
+    """Handle the case where the user wants to place an order."""
+    pizza = state.get("pizza", {})
+    order_status = _validate_order(pizza)
+
+    if order_status == "Complete":
+        context = "The user has provided a complete pizza order. Confirm the order and thank them."
+        sys_msg = f"""{context}
+        
+        Current Pizza Order:
+        Base: {pizza.get("base")}
+        Toppings: {pizza.get("toppings")}
+        Size: {pizza.get("size")}
+        Sauce: {pizza.get("sauce")}
+
+        Confirm the order and thank the user.
+        """
+    else:
+        return _fill_order(state)
+
+    return _execute_agent(state, sys_msg)
+
+
+def _hate_pizza(state: PizzaState):
+    """Handle the case where the user hates pizza."""
+    context = "The user expressed dislike for pizza. Acknowledge their preference politely and suggest alternatives or say goodbye."
+    sys_msg = f"""{context}"""
+
+    return _execute_agent(state, sys_msg)
+
+
+def _fill_order(state: PizzaState):
+    """Ask the user questions until the pizza order is complete."""
+
+    print(f"Filling order for pizza state: {state}")
+
+    pizza = state.get("pizza", {})
+
+    # Handle different pizza-related intents
+    context = "The user expressed love for pizza. Ask them about their pizza preferences."
+
+    sys_msg = f"""{context}
+    
+    Keep asking questions until you have enough information to complete the pizza order.
+    
+    Current Pizza State:
+    Toppings: {pizza.get("toppings")}
+    Size: {pizza.get("size")}
+    Sauce: {pizza.get("sauce")}
+    Base: {pizza.get("base")}
+
+    If order is complete, summarize the order and ask for confirmation.
+    """
+
+    return _execute_agent(state, sys_msg)
+
+
 def _execute_agent(state: PizzaState, sys_msg: str):
     """Execute the agent with the given state and system message."""
 
@@ -45,32 +117,9 @@ def pizza_agent(state: PizzaState):
 
     pizza = _merge_pizza(current_pizza, new_pizza)
 
-    intent = state.get("intent")
     state["pizza"] = pizza  # Update state with merged pizza data
 
-    # Handle different pizza-related intents
-    if intent == "love":
-        context = "The user expressed love for pizza. Ask them about their pizza preferences."
-    else:
-        context = "The user expressed dislike for pizza. Acknowledge their preference politely and suggest alternatives or say goodbye."
-
-    sys_msg = f"""{context}
-    
-    Keep asking questions until you have enough information to complete the pizza order.
-    
-    Current Pizza State:
-    Toppings: {pizza.get("toppings")}
-    Size: {pizza.get("size")}
-    Sauce: {pizza.get("sauce")}
-    Base: {pizza.get("base")}
-
-    If order is complete, summarize the order and ask for confirmation.
-    """
-
-    if _validate_order(pizza) == "Complete":
-        return _execute_agent(state, sys_msg)
-    else:
-        return placeOrder(pizza)
+    return _intent_handler(state)
 
 
 def _validate_order(pizza: dict) -> str:

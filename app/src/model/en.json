@@ -1,5 +1,16 @@
 {
   "intents": {
+    "confirm_order": {
+      "description": "User confirms the pizza order",
+      "phrases": [
+        "Yes, that's correct.",
+        "I confirm my order.",
+        "That's perfect, thank you!",
+        "Sounds good, let's proceed.",
+        "I agree with the order.",
+        "Sounds good."
+      ]
+    },
     "love": {
       "description": "The user expresses love or enjoyment of pizza with a topping, size, base, and sausce",
       "entities": {

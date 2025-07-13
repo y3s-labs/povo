@@ -40,7 +40,7 @@ intent_router = IntentRouter()
 intent_router.register_intents({
     "love": "pizza",
     "hate": "pizza",
-    # "pizza_order": "pizza",
+    "confirm_order": "pizza",
     # "pizza_craving": "pizza",
     # "food_order": "pizza",
     "general_chat": "general",
@@ -63,8 +63,8 @@ def add_general_intents(*intents: str) -> None:
         intent_router.register_intent(intent, "general")
 
 
-def add_custom_flow_intents(flow_name: str, *intents: str) -> None:
-    """Add new intents that should route to a custom flow."""
+def add_booking_flow_intents(flow_name: str, *intents: str) -> None:
+    """Add new intents that should route to a booking flow."""
     for intent in intents:
         intent_router.register_intent(intent, flow_name)
 

@@ -5,7 +5,7 @@ This file centralizes all intent-to-flow mappings, making it easy to manage
 and modify routing behavior without touching the core router logic.
 """
 
-from .router import intent_router, add_pizza_intents, add_general_intents, add_custom_flow_intents
+from .router import intent_router, add_pizza_intents, add_general_intents, add_booking_flow_intents
 
 
 def configure_intent_routing():
@@ -15,7 +15,7 @@ def configure_intent_routing():
     add_pizza_intents(
         "love",
         "hate",
-
+        "confirm_order",
         # "pizza_order",
         # "pizza_craving",
         # "food_order",
@@ -40,7 +40,7 @@ def configure_intent_routing():
     )
 
     # Booking/reservation intents (if you implement the booking flow)
-    add_custom_flow_intents(
+    add_booking_flow_intents(
         "booking",
         "reservation",
         "table_booking",
