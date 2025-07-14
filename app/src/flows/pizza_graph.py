@@ -1,4 +1,5 @@
 from operator import add
+from ..utils.entity_utils import extract_entity_map
 from langgraph.graph import StateGraph, END
 
 from ..services.chat_service import ChatService
@@ -101,19 +102,37 @@ def pizza_agent(state: PizzaState):
     print(f"pizza_agent called pizza state: {state}")
 
     # Ensure we work with a copy of the pizza state
-    session_data = dict(state["session"]).get("data", {})
+    session = state["session"]
+
+    print(f"Current session: {session}")
+    session_data = session.data or {}
+
+    print(f"Current session data: {session_data}")
 
     current_pizza = {}
-    if session_data is not {}:
+    if session_data:
         current_pizza = session_data.get("pizza", {})
 
+    print(f"Current pizza data: {current_pizza}")
+
     # Access and mutate original session data dict
-    new_pizza = {
-        "base": state["entities"].get("BASE_TYPE"),
-        "toppings": state["entities"].get("TOPPING_TYPE"),
-        "size": state["entities"].get("SIZE_TYPE"),
-        "sauce": state["entities"].get("SAUCE_TYPE"),
-    }
+    state_entities = state.get("entities", {})
+    print(f"Current session entities: {state_entities}")
+
+    new_pizza = {}
+    entity_map = extract_entity_map(state_entities)
+
+    print(f"Current entity map: {entity_map}")
+    if entity_map:
+        # Extract pizza-related entities from the state
+        new_pizza = {
+            "base": entity_map.get("BASE_TYPE"),
+            "toppings": entity_map.get("TOPPING_TYPE"),
+            "size": entity_map.get("SIZE_TYPE"),
+            "sauce": entity_map.get("SAUCE_TYPE"),
+        }
+
+    print(f"New pizza data: {new_pizza}")
 
     pizza = _merge_pizza(current_pizza, new_pizza)
 

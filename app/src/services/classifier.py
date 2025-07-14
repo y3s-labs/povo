@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 class NLUResponse(BaseModel):
     intent: str
-    entities: dict
+    entities: list[dict]
 
 
 class Classifier:
@@ -45,39 +45,61 @@ class Classifier:
             return json.load(f)
 
     def _build_system_prompt(self) -> str:
-        prompt = "You are an intent classification and entity extraction model.\n\n"
-        prompt += "Classify the user input into one of these intents and associated entities. If no matching intent is found in list, return 'fallback' as intent:\n"
-
+        prompt = f"""
+        You are an intent classification and entity extraction model.
+        
+        Classify the user input into one of the predefined intents below and extract any mentioned entities.
+        - If no intent matches, return "fallback" as the intent.
+        - Do NOT create up new intents or entity types. You are limited to the intents and entity types provided in the model.
+        - All entity values must be returned as strings, even if they are numbers, times, or dates.
+        - Respond strictly with a valid JSON object that conforms to the Response interface defined below.
+        """
+        prompt += "\n\nList of intents to classify:\n"
         if "intents" in self.intent_data:
             for intent, data in self.intent_data["intents"].items():
                 phrases = ", ".join(data.get("phrases", []))
-                prompt += f'Intent Name: {intent} (e.g., {phrases})\n'
-
+                prompt += f'- Intent Name: {intent} (example phrases: {phrases})\n'
+                prompt += f"Description: {data.get('description', 'No description provided')}\n"
+                prompt += "Entities associated with this intent:\n"
                 for key, entity_info in data.get("entities", {}).items():
                     entity_type = entity_info.get("type", "string")
-                    prompt += f"Entity name: {key}, Entity type: {entity_type}\n"
+                    prompt += f"Entity name: {key}, Entity type: {entity_type}\n\n"
+            prompt += "\n\n"
         else:
             prompt += "No predefined intents.\n"
 
+        prompt += """Entities Types
+        Extract entities only if they match the types below.
+        Return entity type names as keys and entity values as strings. \n        
+        """
         if "entityTypes" in self.intent_data:
-            prompt += "\n\nEntity types and values:\n"
+            prompt += "Entity types and values:\n"
             for entity, data in self.intent_data["entityTypes"].items():
-                values = ", ".join(data.get("values", []))
+                values = "\n ".join(data.get("values", []))
                 prompt += f"Entity Type: {entity} (e.g., {values})\n"
+        else:
+            prompt += "No predefined entity types.\n"
 
-        prompt += (
-            "\n\nExtract entities if mentioned and respond ONLY with JSON:\n"
-            '{\n  "intent": "IntentName",\n  "entities": { "entityType": "entityValue" }\n}'
-            "\n\nRespond strictly in valid JSON format."
-        )
+        prompt += """Respond strictly with valid JSON object that conforms to the Response interface defined bellow.
+            interface Response {
+                "intent": string,  # The classified intent
+                "entities": [{
+                    "entity_type": string  #entity type from the list above
+                    "value": string # The value of the entity
+                }]
+            }
+            """
+
         return prompt
 
     def classify(self, user_message: str) -> NLUResponse:
-        # print(f"classify user message: {self.system_prompt}")
+        print(f"classify user message: {self.system_prompt}")
         messages = [
             SystemMessage(content=self.system_prompt),
             HumanMessage(content=f"User message to classify: {user_message}")
         ]
         output = self.model.invoke(messages)
+
+        print(f"Classifier output: {output.content}")
 
         return self.parser.invoke(output.content)
