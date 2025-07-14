@@ -3,8 +3,9 @@
     <div class="chat-container">
       <div class="chat-header">
         <h1>Povo Chatbot</h1>
-                <div class="session-info" v-if="currentSession">
-          <small>Flow: {{ getCurrentFlow() }} | Session: {{ sessionId.substring(0, 8) }}...</small>
+          <div class="session-info" v-if="currentSession">
+            <!-- <small>Flow: {{ getCurrentFlow() }}</small> -->
+            <small>Intent: {{ getIntent() }}</small>
         </div>
       </div>
       
@@ -88,6 +89,9 @@ export default {
 
         console.log('New Session:', JSON.stringify(this.currentSession, null, 2))
 
+        this.intent = response.data.intent;
+        console.log('Intent', this.intent)
+
         // Add bot response to chat
         this.addMessage(response.data.response, 'bot')
         
@@ -134,6 +138,14 @@ export default {
     getCurrentFlow() {
       return this.currentSession && this.currentSession.flow ? this.currentSession.flow : 'general'
     },
+
+    getCurrentSession() {
+      return this.currentSession
+    },
+
+    getIntent() {
+      return this.intent;
+    }
   },
   
   mounted() {

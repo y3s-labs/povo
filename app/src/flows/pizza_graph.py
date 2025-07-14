@@ -42,7 +42,7 @@ def _place_order(state: PizzaState):
         Size: {pizza.get("size")}
         Sauce: {pizza.get("sauce")}
 
-        Confirm the order and thank the user.
+        Confirm the order, let them know that their pizza is on the way and thank the user.
         """
     else:
         return _fill_order(state)
