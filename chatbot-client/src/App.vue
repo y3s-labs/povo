@@ -3,7 +3,7 @@
     <div class="chat-container">
       <div class="chat-header">
         <h1>Povo Chatbot</h1>
-        <div class="session-info" v-if="currentSession">
+                <div class="session-info" v-if="currentSession">
           <small>Flow: {{ getCurrentFlow() }} | Session: {{ sessionId.substring(0, 8) }}...</small>
         </div>
       </div>
@@ -54,44 +54,40 @@ export default {
   methods: {
     async sendMessage() {
       if (!this.userInput.trim() || this.isLoading) return
-      
+
       const userMessage = this.userInput.trim()
       this.userInput = ''
-      
+
       // Add user message to chat
       this.addMessage(userMessage, 'user')
-      
+
       this.isLoading = true
 
+      // Prepare the request to the backend
       const body = {
-          body: {
-            message: {
-              text: userMessage
-            },
-            session: this.currentSession || {
-              id: this.sessionId,
-              flow: 'general',
-              new: true, // true if this is the first message
-              data: {}
-            },
-            user: {
-              id: this.userId,
-              data: {}
-            }
-          }
+        message: {
+          text: userMessage
+        },
+        session: this.currentSession || {
+          id: this.sessionId,
+          new: this.messages.length === 1, // true if this is the first message
+          data: {}
+        },
+        user: {
+          id: this.userId,
+          data: {}
+        }
       }
-
-      console.log('Sending message:', JSON.stringify(body, null, 2))
       
       try {
-        const response = await axios.post('http://localhost:8080/chat', body)
+        const response = await axios.post('http://localhost:8080/chat', { ...body })
 
-        // Save the updated session from the response
-        if (response.data.session) {
-          this.currentSession = response.data.session
-          console.log('Session updated:', JSON.stringify(this.currentSession.data, null, 2))
-        }
-        
+        // Update current session with the response session
+        const newSession = response.data.session
+        if (newSession) this.currentSession = newSession;
+
+        console.log('New Session:', JSON.stringify(this.currentSession, null, 2))
+
         // Add bot response to chat
         this.addMessage(response.data.response, 'bot')
         
@@ -135,22 +131,9 @@ export default {
       return 'user-' + Math.random().toString(36).substr(2, 9)
     },
 
-    // Session management methods
-    getSessionData() {
-      return this.currentSession ? this.currentSession.data : {}
-    },
-
     getCurrentFlow() {
-      return this.currentFlow || 'general'
+      return this.currentSession && this.currentSession.flow ? this.currentSession.flow : 'general'
     },
-
-    resetSession() {
-      this.currentSession = null
-      this.currentFlow = null
-      this.sessionId = this.generateSessionId()
-      this.messages = []
-      this.addMessage('I\'m Povo, your AI assistant. How can I help you today?', 'bot')
-    }
   },
   
   mounted() {
@@ -193,12 +176,6 @@ export default {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
-}
-
-.session-info {
-  margin-top: 8px;
-  opacity: 0.8;
-  font-size: 12px;
 }
 
 .chat-messages {
@@ -318,4 +295,4 @@ export default {
 .chat-messages::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
-</style> 
+</style>

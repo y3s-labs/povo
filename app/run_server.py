@@ -42,10 +42,6 @@ class ChatRequestBody(BaseModel):
     user: User
 
 
-class ChatRequest(BaseModel):
-    body: ChatRequestBody
-
-
 class ChatResponse(BaseModel):
     response: str
     intent: str
@@ -64,7 +60,7 @@ async def health_check():
 
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequestBody):
     """
     Send a message to the chatbot and get a response.
     Expected request format:
@@ -88,9 +84,9 @@ async def chat(request: ChatRequest):
     """
     try:
         # Extract the message text from the nested structure
-        message_text = request.body.message.text
-        user = request.body.user
-        session = request.body.session
+        message_text: str = request.message.text
+        user: User = request.user
+        session: Session = request.session
 
         print(f"Received message: {message_text}")
         print(f"User ID: {user.id}")
